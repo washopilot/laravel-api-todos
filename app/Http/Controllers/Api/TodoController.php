@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Todo;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTodoRequest;
+// use Illuminate\Http\Request;
 
 class TodoController extends Controller {
     /**
@@ -34,8 +35,16 @@ class TodoController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(StoreTodoRequest $request) {
         //
+        $todo = Todo::create($request->all());
+        return response()->json(
+            [
+                'message' => 'Todo saved successfully!',
+                'todo' => $todo
+            ],
+            200
+        );
     }
 
     /**
@@ -65,8 +74,16 @@ class TodoController extends Controller {
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo) {
-        //
+    public function update(StoreTodoRequest $request, Todo $todo) {
+        $todo->update($request->all());
+
+        return response()->json(
+            [
+                'message' => 'Todo updated successfully!',
+                'todo' => $todo
+            ],
+            200
+        );
     }
 
     /**
@@ -76,6 +93,13 @@ class TodoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy(Todo $todo) {
-        //
+        $todo->delete();
+
+        return response()->json(
+            [
+                'message' => 'Todo deleted successfully!'
+            ],
+            200
+        );
     }
 }
