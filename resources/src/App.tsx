@@ -1,40 +1,46 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Container, Nav, Navbar, NavDropdown, Stack } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row, Stack } from 'react-bootstrap';
 import reactLogo from './assets/react.svg';
 import './App.css';
 
+import { Todo } from './models';
+
+interface Respuesta {
+    data: Todo[];
+}
+
 const App: React.FC = () => {
+    const [show, setShow] = useState(true);
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const url: string = 'http://127.0.0.1:8000/api/todos';
+
+        function getTodos(url: string): Promise<Respuesta> {
+            return fetch(url).then((response) => response.json());
+        }
+
+        getTodos(url).then((value) => console.log(value, value.data[0].status));
+    }, []);
+
     return (
         <>
-            <Navbar bg="light" expand="lg">
-                <Container>
-                    {/* <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand> */}
-                    <Navbar.Brand href="/" className="text-info">
-                        <img
-                            alt="reactLogo"
-                            src={reactLogo}
-                            width="30"
-                            height="30"
-                            className="d-inline-block align-top"
-                        />
-                        React Bootstrap
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            <Nav.Link href="#">Home</Nav.Link>
-                            <Nav.Link href="#">Link</Nav.Link>
-                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#">Another action</NavDropdown.Item>
-                                <NavDropdown.Item href="#">Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#">Separated link</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+            <Container className="my-5">
+                <Row className="justify-content-between">
+                    <Col xs="auto" />
+                    <Col xs="8">
+                        <Stack direction="horizontal" gap={3}>
+                            <Form.Control className="me-auto" placeholder="Add your item here..." />
+                            <Button variant="secondary">Submit</Button>
+                            <div className="vr" />
+                            <Button variant="outline-danger">Reset</Button>
+                        </Stack>
+                    </Col>
+                    <Col xs="auto" />
+                </Row>
+            </Container>
         </>
     );
 };
