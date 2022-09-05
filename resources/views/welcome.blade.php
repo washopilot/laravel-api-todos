@@ -13,7 +13,7 @@
 
 </head>
 
-<body class="antialiased">
+<body>
     <div id="root"></div>
 
 </body>
