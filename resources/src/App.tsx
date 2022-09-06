@@ -39,6 +39,7 @@ const App: React.FC = () => {
                         {todos.map((todo: Todo) => (
                             <CustomTodoCheck
                                 key={todo.id}
+                                todoId={todo.id}
                                 todoStatus={todo.status == 'complete'}
                                 todoDescription={todo.todo}
                             />
