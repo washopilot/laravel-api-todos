@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row, Stack } from 'react-bootstrap';
-import reactLogo from './assets/react.svg';
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import './App.css';
 
 import { Todo } from './models';
+import CustomTodoCheck from './components/CustomTodoCheck';
 
 interface Respuesta {
     data: Todo[];
@@ -14,6 +14,7 @@ const App: React.FC = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [todos, setTodos] = useState<Todo[]>([]);
 
     useEffect(() => {
         const url: string = 'http://127.0.0.1:8000/api/todos';
@@ -22,21 +23,26 @@ const App: React.FC = () => {
             return fetch(url).then((response) => response.json());
         }
 
-        getTodos(url).then((value) => console.log(value, value.data[0].status));
+        getTodos(url).then((value) => setTodos(value.data));
     }, []);
+
+    useEffect(() => {
+        console.log(todos);
+    }, [todos]);
 
     return (
         <>
             <Container className="my-5">
                 <Row className="justify-content-between">
                     <Col xs="auto" />
-                    <Col xs="8">
-                        <Stack direction="horizontal" gap={3}>
-                            <Form.Control className="me-auto" placeholder="Add your item here..." />
-                            <Button variant="secondary">Submit</Button>
-                            <div className="vr" />
-                            <Button variant="outline-danger">Reset</Button>
-                        </Stack>
+                    <Col xs="10">
+                        {todos.map((todo: Todo) => (
+                            <CustomTodoCheck
+                                key={todo.id}
+                                todoStatus={todo.status == 'complete'}
+                                todoDescription={todo.todo}
+                            />
+                        ))}
                     </Col>
                     <Col xs="auto" />
                 </Row>
