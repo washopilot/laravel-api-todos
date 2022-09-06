@@ -17,7 +17,8 @@ const App: React.FC = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
 
     useEffect(() => {
-        const url: string = 'http://127.0.0.1:8000/api/todos';
+        const url = `${import.meta.env.VITE_APP_URL}/api/todos`;
+        // const url: string = 'http://127.0.0.1:8000/api/todos';
 
         function getTodos(url: string): Promise<Respuesta> {
             return fetch(url).then((response) => response.json());
