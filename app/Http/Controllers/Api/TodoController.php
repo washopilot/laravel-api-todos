@@ -15,9 +15,7 @@ class TodoController extends Controller {
      */
     public function index() {
         $todos = Todo::all();
-        return response()->json([
-            'data' => $todos
-        ]);
+        return response()->json($todos);
     }
 
     /**

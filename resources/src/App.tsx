@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import axios, { AxiosResponse } from 'axios';
 import './App.css';
 
 import { Todo } from './models';
 import CustomTodoCheck from './components/CustomTodoCheck';
-
-interface Respuesta {
-    data: Todo[];
-}
 
 const App: React.FC = () => {
     const [show, setShow] = useState(true);
@@ -18,13 +15,10 @@ const App: React.FC = () => {
 
     useEffect(() => {
         const url = `${import.meta.env.VITE_APP_URL}/api/todos`;
-        // const url: string = 'http://127.0.0.1:8000/api/todos';
-
-        function getTodos(url: string): Promise<Respuesta> {
-            return fetch(url).then((response) => response.json());
-        }
-
-        getTodos(url).then((value) => setTodos(value.data));
+        axios.get(url).then((response: AxiosResponse<Todo[]>) => {
+            console.log(response);
+            setTodos(response.data);
+        });
     }, []);
 
     useEffect(() => {
