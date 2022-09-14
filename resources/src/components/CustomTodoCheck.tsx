@@ -18,6 +18,7 @@ const CustomTodoCheck = ({ onTodo }: { onTodo: Todo }) => {
                 <HStack alignItems={'center'} divider={<StackDivider borderColor="gray.200" />} spacing={5}>
                     <Switch id={`todo-${onTodo.id}`} onChange={handleChange} isChecked={checked} />
                     <FormLabel
+                        my={1}
                         htmlFor={`todo-${onTodo.id}`}
                         sx={checked ? { ' textDecoration': 'line-through #3182ce' } : undefined}
                         style={{ userSelect: 'none' }}>
