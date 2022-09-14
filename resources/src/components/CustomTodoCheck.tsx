@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Form, Stack } from 'react-bootstrap';
+import { Button, ButtonGroup, Flex, FormLabel, HStack, Spacer, StackDivider } from '@chakra-ui/react';
+import { Switch } from '@chakra-ui/switch';
+import React, { useEffect, useState } from 'react';
+import { Todo } from '../models';
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
-const CustomTodoCheck = ({
-    todoStatus,
-    todoDescription,
-    todoId
-}: {
-    todoStatus: boolean;
-    todoDescription: string;
-    todoId: number;
-}) => {
-    const [checked, setChecked] = useState(todoStatus);
+const CustomTodoCheck = ({ onTodo }: { onTodo: Todo }) => {
+    const [checked, setChecked] = useState(onTodo.status == 'complete');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.checked);
@@ -18,22 +13,28 @@ const CustomTodoCheck = ({
     };
 
     return (
-        <Stack direction="horizontal" gap={3} className="justify-content-between my-3">
-            <Form.Check type="switch" id={`switch-${todoId}`}>
-                <Form.Check.Input defaultChecked={checked} onChange={handleChange}></Form.Check.Input>
-                <Form.Check.Label className={!checked ? 'text-muted text-muted-custom' : ''}>
-                    {todoDescription}
-                </Form.Check.Label>
-            </Form.Check>
-            <div>
-                <Button className="mx-1" size="sm" variant="primary" onClick={() => console.log('Editar')}>
-                    Editar
-                </Button>
-                <Button className="mx-1" size="sm" variant="danger" onClick={() => console.log('Eliminar')}>
-                    Eliminar
-                </Button>
-            </div>
-        </Stack>
+        <>
+            <Flex minWidth="max-content" alignItems="center" gap="2">
+                <HStack alignItems={'center'} divider={<StackDivider borderColor="gray.200" />} spacing={5}>
+                    <Switch id={`todo-${onTodo.id}`} onChange={handleChange} isChecked={checked} />
+                    <FormLabel
+                        htmlFor={`todo-${onTodo.id}`}
+                        sx={checked ? { ' textDecoration': 'line-through #3182ce' } : undefined}
+                        style={{ userSelect: 'none' }}>
+                        {onTodo.todo}
+                    </FormLabel>
+                </HStack>
+                <Spacer />
+                <ButtonGroup size="xs">
+                    <Button leftIcon={<EditIcon />} colorScheme="blue">
+                        Editar
+                    </Button>
+                    <Button leftIcon={<DeleteIcon />} colorScheme="red">
+                        Borrar
+                    </Button>
+                </ButtonGroup>
+            </Flex>
+        </>
     );
 };
 

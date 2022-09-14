@@ -5,9 +5,12 @@
         "build": "vite build"
     },
     "dependencies": {
-        "bootstrap": "^5.2.0",
+        "@chakra-ui/icons": "^2.0.9",
+        "@chakra-ui/react": "^2.3.2",
+        "@emotion/react": "^11.10.4",
+        "@emotion/styled": "^11.10.4",
+        "framer-motion": "^7.3.5",
         "react": "^18.2.0",
-        "react-bootstrap": "^2.5.0",
         "react-dom": "^18.2.0"
     },
     "devDependencies": {
@@ -18,8 +21,6 @@
         "@vitejs/plugin-react": "^2.0.1",
         "axios": "^0.27",
         "laravel-vite-plugin": "^0.6.0",
-        "lodash": "^4.17.19",
-        "postcss": "^8.1.14",
         "prettier": "^2.7.1",
         "typescript": "^4.6.4",
         "vite": "^3.0.7"

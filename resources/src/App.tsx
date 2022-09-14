@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
 import axios, { AxiosResponse } from 'axios';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { Container } from '@chakra-ui/react';
 
-import { Todo } from './models';
 import CustomTodoCheck from './components/CustomTodoCheck';
+import { Todo } from './models';
 
 const App: React.FC = () => {
-    const [show, setShow] = useState(true);
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [todos, setTodos] = useState<Todo[]>([]);
 
     useEffect(() => {
@@ -27,21 +22,10 @@ const App: React.FC = () => {
 
     return (
         <>
-            <Container className="my-5">
-                <Row className="justify-content-between">
-                    <Col xs="auto" />
-                    <Col xs="10">
-                        {todos.map((todo: Todo) => (
-                            <CustomTodoCheck
-                                key={todo.id}
-                                todoId={todo.id}
-                                todoStatus={todo.status == 'complete'}
-                                todoDescription={todo.todo}
-                            />
-                        ))}
-                    </Col>
-                    <Col xs="auto" />
-                </Row>
+            <Container py={5} alignContent={'space-between'}>
+                {todos.map((todo: Todo) => (
+                    <CustomTodoCheck key={todo.id} onTodo={todo} />
+                ))}
             </Container>
         </>
     );
