@@ -2,21 +2,23 @@ import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, Flex, FormLabel, HStack, Spacer, StackDivider } from '@chakra-ui/react';
 import { Switch } from '@chakra-ui/switch';
 import React from 'react';
+
 import { Todo } from '../models';
 
 interface ICustomTodosCheckProps {
-    onTodos: Todo[];
+    todos: Todo[];
     onChangeTodos: (todo: Todo) => void;
 }
 
-const CustomTodosCheck = ({ onTodos, onChangeTodos }: ICustomTodosCheckProps) => {
+const CustomTodosCheck = ({ todos, onChangeTodos }: ICustomTodosCheckProps) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChangeTodos({ id: Number(e.target.id), status: e.target.checked ? 'complete' : 'incomplete' });
+        const todo = { id: Number(e.target.id), status: e.target.checked ? 'complete' : 'incomplete' };
+        onChangeTodos(todo);
     };
 
     return (
         <>
-            {onTodos.map((todo) => {
+            {todos.map((todo) => {
                 const checked = todo.status == 'complete';
                 return (
                     <Flex key={todo.id} minWidth="max-content" alignItems="center" gap="2">

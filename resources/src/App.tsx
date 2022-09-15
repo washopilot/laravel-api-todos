@@ -6,7 +6,7 @@ import CustomTodosCheck from './components/CustomTodosCheck';
 import { Todo } from './models';
 
 const App: React.FC = () => {
-    const [todos, setTodos] = useState<Todo[]>([]);
+    const [todos, setTodos] = useState([] as Todo[]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const App: React.FC = () => {
                         mx={'auto'}
                     />
                 )}
-                <CustomTodosCheck onTodos={todos} onChangeTodos={onChangeTodos} />
+                <CustomTodosCheck todos={todos} onChangeTodos={onChangeTodos} />
             </Container>
         </>
     );
