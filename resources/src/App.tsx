@@ -2,7 +2,7 @@ import { Container, Spinner } from '@chakra-ui/react';
 import axios, { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 
-import CustomTodoCheck from './components/CustomTodoCheck';
+import CustomTodosCheck from './components/CustomTodosCheck';
 import { Todo } from './models';
 
 const App: React.FC = () => {
@@ -22,6 +22,21 @@ const App: React.FC = () => {
         console.log(todos);
     }, [todos]);
 
+    const onChangeTodos = (todo: Todo): void => {
+        setTodos((todos) => {
+            return todos.map((value) => {
+                if (value.id == todo.id) {
+                    return {
+                        id: todo.id,
+                        status: todo.status,
+                        todo: value.todo
+                    };
+                }
+                return value;
+            });
+        });
+    };
+
     return (
         <>
             <Container py={5} alignContent={'space-between'} textAlign={'center'}>
@@ -35,10 +50,7 @@ const App: React.FC = () => {
                         mx={'auto'}
                     />
                 )}
-
-                {todos.map((todo: Todo) => (
-                    <CustomTodoCheck key={todo.id} onTodo={todo} />
-                ))}
+                <CustomTodosCheck onTodos={todos} onChangeTodos={onChangeTodos} />
             </Container>
         </>
     );
