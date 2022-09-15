@@ -22,7 +22,7 @@ const App: React.FC = () => {
         console.log(todos);
     }, [todos]);
 
-    const onChangeTodos = (todo: Todo): void => {
+    const onChangeTodos = (todo: Todo) => {
         setTodos((todos) => {
             return todos.map((value) => {
                 if (value.id == todo.id) {

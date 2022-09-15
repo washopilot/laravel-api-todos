@@ -4,7 +4,12 @@ import { Switch } from '@chakra-ui/switch';
 import React from 'react';
 import { Todo } from '../models';
 
-const CustomTodosCheck = ({ onTodos, onChangeTodos }: { onTodos: Todo[]; onChangeTodos: ({}: Todo) => void }) => {
+interface ICustomTodosCheckProps {
+    onTodos: Todo[];
+    onChangeTodos: (todo: Todo) => void;
+}
+
+const CustomTodosCheck = ({ onTodos, onChangeTodos }: ICustomTodosCheckProps) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChangeTodos({ id: Number(e.target.id), status: e.target.checked ? 'complete' : 'incomplete' });
     };
