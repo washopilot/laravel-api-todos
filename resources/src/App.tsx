@@ -1,6 +1,6 @@
 import { Container, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import TodosCheck from './components/TodosCheck';
 import { Todo, TodoState } from './models';
@@ -25,32 +25,22 @@ const App = () => {
     };
 
     const handlePut = (todoChanged: Todo) => {
-        // Actualizo estado de isLoading a true
         handleUpdateState({ ...todoChanged, isLoading: true });
 
         axios.put<Todo>(`${url}/${todoChanged.id}`, todoChanged).then(() => {
             console.count('axios put todoChanged');
-
-            // Actualiza estado isLoading a false
             handleUpdateState({ ...todoChanged, isLoading: false });
         });
     };
 
-    const handleUpdateState = (todoState: TodoState) => {
-        setAppState((todosState) => {
-            return todosState.map((value) => {
-                if (value.id == todoState.id) {
-                    return {
-                        id: todoState.id,
-                        status: todoState.status,
-                        todo: todoState.todo,
-                        isLoading: todoState.isLoading
-                    };
-                }
-                return value;
-            });
-        });
-    };
+    const handleUpdateState = useCallback(
+        (todoStateChanged: TodoState) => {
+            const appStateCopy = [...appState];
+            appStateCopy[appStateCopy.findIndex((obj) => obj.id === todoStateChanged.id)] = todoStateChanged;
+            setAppState(appStateCopy);
+        },
+        [appState]
+    );
 
     // Onload, fetch data and set loading to false when complete
     useEffect(() => {
@@ -63,11 +53,7 @@ const App = () => {
 
     const onChangeAppState = (todoChanged: Todo) => {
         console.count('todo cambiado');
-        console.log(todoChanged);
-
         handlePut(todoChanged);
-
-        // handleFetch(); // refresh view
     };
 
     return (
