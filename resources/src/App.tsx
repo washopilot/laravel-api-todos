@@ -3,33 +3,46 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
 import TodosCheck from './components/TodosCheck';
-import { Todo, TodoState } from './models';
+import { AppLoadingState, Todo, Todo as TodoState } from './models';
 
 const url = `${import.meta.env.VITE_APP_URL}/api/todos`;
 
 const App = () => {
     const [appState, setAppState] = useState([] as TodoState[]);
+    const [appLoadingState, setAppLoadingState] = useState({} as AppLoadingState);
     const [loading, setLoading] = useState(true);
 
     const handleFetch = () => {
         setLoading(true);
         axios.get<Todo[]>(url).then((response) => {
             console.count('axios get all todos');
-            setAppState(
-                response.data.map((value) => {
-                    return { ...value, isLoading: false };
-                })
+            setAppState(response.data);
+            setAppLoadingState(
+                response.data.reduce((acc, value) => {
+                    return { ...acc, [value.id]: false };
+                }, {})
             );
             setLoading(false);
         });
     };
 
     const handlePut = (todoChanged: Todo) => {
-        handleUpdateState({ ...todoChanged, isLoading: true });
+        setAppLoadingState((prev) => {
+            return {
+                ...prev,
+                [todoChanged.id]: true
+            };
+        });
 
         axios.put<Todo>(`${url}/${todoChanged.id}`, todoChanged).then(() => {
             console.count('axios put todoChanged');
-            handleUpdateState({ ...todoChanged, isLoading: false });
+            handleUpdateState({ ...todoChanged });
+            setAppLoadingState((prev) => {
+                return {
+                    ...prev,
+                    [todoChanged.id]: false
+                };
+            });
         });
     };
 
@@ -51,6 +64,10 @@ const App = () => {
         console.count('cambio app state');
     }, [appState]);
 
+    useEffect(() => {
+        console.count('cambio appLoading state');
+    }, [appLoadingState]);
+
     const onChangeAppState = (todoChanged: Todo) => {
         console.count('todo cambiado');
         handlePut(todoChanged);
@@ -69,7 +86,13 @@ const App = () => {
                         mx={'auto'}
                     />
                 )}
-                {!loading && <TodosCheck appState={appState} onChangeAppState={onChangeAppState} />}
+                {!loading && (
+                    <TodosCheck
+                        appState={appState}
+                        appLoadingState={appLoadingState}
+                        onChangeAppState={onChangeAppState}
+                    />
+                )}
             </Container>
         </>
     );

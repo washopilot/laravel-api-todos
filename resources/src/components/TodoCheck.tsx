@@ -11,19 +11,20 @@ import {
     Switch
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { TodoState } from '../models';
+import { Todo as TodoState } from '../models';
 
 interface ITodoCheckProps {
     todoState: TodoState;
+    todoLoadingState: boolean;
     onHandleChangeSwitch: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TodoCheck = ({ todoState, onHandleChangeSwitch }: ITodoCheckProps) => {
+const TodoCheck = ({ todoState, todoLoadingState, onHandleChangeSwitch }: ITodoCheckProps) => {
     const [valueInput, setValueInput] = useState(todoState.todo);
 
     const checked = todoState.status == 'complete';
     return (
-        <Skeleton key={todoState.id} isLoaded={!todoState.isLoading}>
+        <Skeleton key={todoState.id} isLoaded={!todoLoadingState}>
             <Flex minWidth={'max-content'} alignItems="center" my={1}>
                 <HStack flex={1} alignItems={'center'}>
                     <InputGroup size={'md'}>

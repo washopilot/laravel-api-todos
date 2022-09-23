@@ -4,6 +4,6 @@ export interface Todo {
     todo?: string;
 }
 
-export interface TodoState extends Todo {
-    isLoading?: boolean;
+export interface AppLoadingState {
+    [key: number]: boolean;
 }
