@@ -5,14 +5,15 @@ import TodoCheck from './TodoCheck';
 
 interface ICustomTodosCheckProps {
     appState: TodoState[];
-    onChangeAppState: (todoState: TodoState) => void;
+    onChangeAppState: (todoChanged: Todo) => void;
 }
 
 const TodosCheck = ({ appState, onChangeAppState }: ICustomTodosCheckProps) => {
     const handleChangeSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const todoChanged: Todo = {
             id: Number(e.target.id),
-            status: e.target.checked ? 'complete' : 'incomplete'
+            status: e.target.checked ? 'complete' : 'incomplete',
+            todo: appState.find((o) => o.id == Number(e.target.id))?.todo
         };
         onChangeAppState(todoChanged);
     };
