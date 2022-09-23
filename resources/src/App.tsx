@@ -2,7 +2,7 @@ import { Container, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import CustomTodosCheck from './components/CustomTodosCheck';
+import TodosCheck from './components/TodosCheck';
 import { Todo, TodoState } from './models';
 
 const url = `${import.meta.env.VITE_APP_URL}/api/todos`;
@@ -90,7 +90,7 @@ const App = () => {
                         mx={'auto'}
                     />
                 )}
-                {!loading && <CustomTodosCheck appState={appState} onChangeAppState={onChangeAppState} />}
+                {!loading && <TodosCheck appState={appState} onChangeAppState={onChangeAppState} />}
             </Container>
         </>
     );
