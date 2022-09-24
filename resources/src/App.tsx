@@ -1,6 +1,7 @@
 import { Container, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import InputTodoValue from './components/InputTodoValue';
 
 import TodosCheck from './components/TodosCheck';
 import { AppLoadingState, Todo, Todo as TodoState } from './models';
@@ -79,13 +80,13 @@ const App = () => {
         handleFetch();
     }, []);
 
-    useEffect(() => {
-        console.count('cambio app state');
-    }, [appState]);
+    // useEffect(() => {
+    //     console.count('cambio app state');
+    // }, [appState]);
 
-    useEffect(() => {
-        console.count('cambio appLoading state');
-    }, [appLoadingState]);
+    // useEffect(() => {
+    //     console.count('cambio appLoading state');
+    // }, [appLoadingState]);
 
     const onChangeAppState = (todoChanged: Todo) => {
         console.count('todo cambiado');
@@ -97,9 +98,18 @@ const App = () => {
         handleDelete(todoDelete);
     };
 
+    const onHandleInput = (todoInput: Todo) => {
+        console.count(`todo creado`);
+        axios.post<Todo>(`${url}`, todoInput).then(() => {
+            console.count('axios post todoInput');
+            handleFetch();
+        });
+    };
+
     return (
         <>
             <Container py={5} alignContent={'space-between'} textAlign={'center'}>
+                <InputTodoValue onHandleInput={onHandleInput} />
                 {loading && (
                     <Spinner
                         thickness="4px"

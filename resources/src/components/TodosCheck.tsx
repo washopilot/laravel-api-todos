@@ -22,17 +22,19 @@ const TodosCheck = ({ appState, appLoadingState, onChangeAppState, onHandleDelet
 
     return (
         <>
-            {appState.map((todoState) => {
-                return (
-                    <TodoCheck
-                        key={todoState.id}
-                        todoState={todoState}
-                        todoLoadingState={appLoadingState[todoState.id]}
-                        onHandleChangeSwitch={handleChangeSwitch}
-                        onHandleDelete={handleDelete}
-                    />
-                );
-            })}
+            {appState
+                .map((todoState) => {
+                    return (
+                        <TodoCheck
+                            key={todoState.id}
+                            todoState={todoState}
+                            todoLoadingState={appLoadingState[todoState.id]}
+                            onHandleChangeSwitch={handleChangeSwitch}
+                            onHandleDelete={handleDelete}
+                        />
+                    );
+                })
+                .reverse()}
         </>
     );
 };
