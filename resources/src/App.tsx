@@ -88,7 +88,7 @@ const App = () => {
     //     console.count('cambio appLoading state');
     // }, [appLoadingState]);
 
-    const onChangeAppState = (todoChanged: Todo) => {
+    const onChangeSwitchState = (todoChanged: Todo) => {
         console.count('todo cambiado');
         handlePut(todoChanged);
     };
@@ -124,7 +124,7 @@ const App = () => {
                     <TodosCheck
                         appState={appState}
                         appLoadingState={appLoadingState}
-                        onChangeAppState={onChangeAppState}
+                        onChangeSwitchState={onChangeSwitchState}
                         onHandleDelete={onHandleDelete}
                     />
                 )}
