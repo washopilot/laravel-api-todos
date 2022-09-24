@@ -7,17 +7,18 @@ interface ICustomTodosCheckProps {
     appState: TodoState[];
     appLoadingState: AppLoadingState;
     onChangeAppState: (todoChanged: Todo) => void;
+    onHandleDelete: (todoDelete: string) => void;
 }
 
-const TodosCheck = ({ appState, appLoadingState, onChangeAppState }: ICustomTodosCheckProps) => {
+const TodosCheck = ({ appState, appLoadingState, onChangeAppState, onHandleDelete }: ICustomTodosCheckProps) => {
     const handleChangeSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const todoChanged: Todo = {
+        onChangeAppState({
             id: Number(e.target.id),
             status: e.target.checked ? 'complete' : 'incomplete',
             todo: appState.find((o) => o.id == Number(e.target.id))?.todo
-        };
-        onChangeAppState(todoChanged);
+        });
     };
+    const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onHandleDelete(e.currentTarget.id);
 
     return (
         <>
@@ -28,6 +29,7 @@ const TodosCheck = ({ appState, appLoadingState, onChangeAppState }: ICustomTodo
                         todoState={todoState}
                         todoLoadingState={appLoadingState[todoState.id]}
                         onHandleChangeSwitch={handleChangeSwitch}
+                        onHandleDelete={handleDelete}
                     />
                 );
             })}

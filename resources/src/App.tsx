@@ -46,6 +46,25 @@ const App = () => {
         });
     };
 
+    const handleDelete = (todoDelete: string) => {
+        setAppLoadingState((prev) => {
+            return {
+                ...prev,
+                [todoDelete]: true
+            };
+        });
+        axios.delete<Todo>(`${url}/${todoDelete}`).then(() => {
+            console.count('axios delete');
+            setAppState((prev) => {
+                return prev.filter((obj) => obj.id !== Number(todoDelete));
+            });
+            setAppLoadingState((prev) => {
+                delete prev[Number(todoDelete)];
+                return prev;
+            });
+        });
+    };
+
     const handleUpdateState = useCallback(
         (todoStateChanged: TodoState) => {
             const appStateCopy = [...appState];
@@ -73,6 +92,11 @@ const App = () => {
         handlePut(todoChanged);
     };
 
+    const onHandleDelete = (todoDelete: string) => {
+        console.count(`todo eliminado`);
+        handleDelete(todoDelete);
+    };
+
     return (
         <>
             <Container py={5} alignContent={'space-between'} textAlign={'center'}>
@@ -91,6 +115,7 @@ const App = () => {
                         appState={appState}
                         appLoadingState={appLoadingState}
                         onChangeAppState={onChangeAppState}
+                        onHandleDelete={onHandleDelete}
                     />
                 )}
             </Container>

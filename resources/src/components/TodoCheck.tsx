@@ -17,9 +17,10 @@ interface ITodoCheckProps {
     todoState: TodoState;
     todoLoadingState: boolean;
     onHandleChangeSwitch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onHandleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-const TodoCheck = ({ todoState, todoLoadingState, onHandleChangeSwitch }: ITodoCheckProps) => {
+const TodoCheck = ({ todoState, todoLoadingState, onHandleChangeSwitch, onHandleDelete }: ITodoCheckProps) => {
     const [valueInput, setValueInput] = useState(todoState.todo);
 
     const checked = todoState.status == 'complete';
@@ -43,7 +44,12 @@ const TodoCheck = ({ todoState, todoLoadingState, onHandleChangeSwitch }: ITodoC
                             value={valueInput}
                         />
                         <InputRightAddon>
-                            <Button size={'xs'} colorScheme="red" px={2}>
+                            <Button
+                                onClick={onHandleDelete}
+                                size={'xs'}
+                                colorScheme="red"
+                                px={2}
+                                id={`${todoState.id}`}>
                                 <DeleteIcon />
                             </Button>
                         </InputRightAddon>
