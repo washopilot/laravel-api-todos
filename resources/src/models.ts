@@ -4,6 +4,6 @@ export interface Todo {
     todo?: string;
 }
 
-export interface AppLoadingState {
+export interface TodosLoadingState {
     [key: number]: boolean;
 }

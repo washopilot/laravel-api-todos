@@ -1,32 +1,23 @@
-import React from 'react';
+import { useContext } from 'react';
 
-import { AppLoadingState, Todo, Todo as TodoState } from '../models';
 import TodoCheck from './TodoCheck';
 
-interface ICustomTodosCheckProps {
-    appState: TodoState[];
-    appLoadingState: AppLoadingState;
-    onChangeSwitchState: (todoChanged: Todo) => void;
-    onHandleDelete: (todoDelete: string) => void;
-}
+import { AppStateContext } from '../AppStateContext';
 
-const TodosCheck = ({ appState, appLoadingState, onChangeSwitchState, onHandleDelete }: ICustomTodosCheckProps) => {
-    const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onHandleDelete(e.currentTarget.id);
+const TodosCheck = () => {
+    const { todosState, todosLoadingState, deleteTodoState, updateTodoState } = useContext(AppStateContext);
 
     return (
         <>
-            {appState
+            {todosState
                 .map((todoState) => {
                     return (
                         <TodoCheck
                             key={todoState.id}
                             todoState={todoState}
-                            todoLoadingState={appLoadingState[todoState.id]}
-                            onHandleChangeSwitch={(todoChanged: Todo) => {
-                                onChangeSwitchState(todoChanged);
-                                console.log('ups')
-                            }}
-                            onHandleDelete={handleDelete}
+                            todosLoadingState={todosLoadingState}
+                            deleteTodoState={deleteTodoState}
+                            updateTodoState={updateTodoState}
                         />
                     );
                 })

@@ -1,17 +1,15 @@
 import { Button, Input, InputGroup, InputRightAddon } from '@chakra-ui/react';
-import { useState } from 'react';
-import { Todo } from '../models';
+import { useContext, useState } from 'react';
 
-interface InputTodoValueProps {
-    onHandleInput: (todoInput: Todo) => void;
-}
+import { AppStateContext } from '../AppStateContext';
 
-const InputTodoValue = ({ onHandleInput }: InputTodoValueProps) => {
+const InputTodoValue = () => {
     const [inputValue, setInputValue] = useState('');
+    const { inputTodoState } = useContext(AppStateContext);
 
     const handleInputValue = () => {
         if (inputValue) {
-            onHandleInput({ todo: inputValue, status: 'incomplete', id: -1 });
+            inputTodoState({ todo: inputValue, status: 'incomplete', id: -1 });
             setInputValue('');
         }
     };

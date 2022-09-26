@@ -11,26 +11,30 @@ import {
     Switch
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Todo as TodoState } from '../models';
+import { Todo as TodoState, TodosLoadingState } from '../models';
 
 interface ITodoCheckProps {
     todoState: TodoState;
-    todoLoadingState: boolean;
-    onHandleChangeSwitch: (todoState: TodoState) => void;
-    onHandleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    todosLoadingState: TodosLoadingState;
+    updateTodoState: (todoState: TodoState) => void;
+    deleteTodoState: (id: number) => void;
 }
 
-const TodoCheck = ({ todoState, todoLoadingState, onHandleChangeSwitch, onHandleDelete }: ITodoCheckProps) => {
+const TodoCheck = ({ todoState, todosLoadingState, updateTodoState, deleteTodoState }: ITodoCheckProps) => {
     const [valueInput, setValueInput] = useState(todoState.todo);
     const [checked, setChecked] = useState(todoState.status == 'complete');
 
     const handleChangeSwitch = () => {
         setChecked((p) => !p);
-        onHandleChangeSwitch({ ...todoState, status: !checked ? 'complete' : 'incomplete' });
+        updateTodoState({ ...todoState, status: !checked ? 'complete' : 'incomplete' });
+    };
+
+    const onHandleDelete = () => {
+        deleteTodoState(todoState.id);
     };
 
     return (
-        <Skeleton key={todoState.id} isLoaded={!todoLoadingState}>
+        <Skeleton key={todoState.id} isLoaded={!todosLoadingState[todoState.id]}>
             <Flex minWidth={'max-content'} alignItems="center" my={1}>
                 <HStack flex={1} alignItems={'center'}>
                     <InputGroup size={'md'}>
