@@ -29,8 +29,14 @@ const TodoCheck = ({ todoState, todosLoadingState, updateTodoState, deleteTodoSt
         updateTodoState({ ...todoState, status: !checked ? 'complete' : 'incomplete' });
     };
 
-    const onHandleDelete = () => {
+    const handleDelete = () => {
         deleteTodoState(todoState.id);
+    };
+
+    const handleUpdate = () => {
+        console.log(valueInput);
+        if (valueInput && valueInput != todoState.todo && valueInput != '')
+            updateTodoState({ ...todoState, todo: valueInput });
     };
 
     return (
@@ -46,19 +52,14 @@ const TodoCheck = ({ todoState, todosLoadingState, updateTodoState, deleteTodoSt
                             onChange={(e) => setValueInput(e.currentTarget.value)}
                             onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
-                                    console.log(valueInput);
+                                    handleUpdate();
                                 }
                             }}
-                            onBlur={(e) => console.log(e.currentTarget.value)}
+                            onBlur={handleUpdate}
                             value={valueInput}
                         />
                         <InputRightAddon>
-                            <Button
-                                onClick={onHandleDelete}
-                                size={'xs'}
-                                colorScheme="red"
-                                px={2}
-                                id={`${todoState.id}`}>
+                            <Button onClick={handleDelete} size={'xs'} colorScheme="red" px={2} id={`${todoState.id}`}>
                                 <DeleteIcon />
                             </Button>
                         </InputRightAddon>
