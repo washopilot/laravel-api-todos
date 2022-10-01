@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->enum('status', ['complete', 'incomplete'])->default('incomplete');
             $table
                 ->foreignId('category_id')
-                ->nullable()
+                // ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
