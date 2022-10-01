@@ -4,24 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('todos', function (Blueprint $table) {
             $table->id();
             $table->string('todo');
             $table->enum('status', ['complete', 'incomplete'])->default('incomplete');
-            $table->foreignId('category_id')
+            $table
+                ->foreignId('category_id')
                 ->nullable()
                 ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -31,8 +30,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('todos');
     }
 };
