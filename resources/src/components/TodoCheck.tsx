@@ -1,15 +1,5 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import {
-    Button,
-    Flex,
-    HStack,
-    Input,
-    InputGroup,
-    InputLeftAddon,
-    InputRightAddon,
-    Skeleton,
-    Switch
-} from '@chakra-ui/react';
+import { Button, Flex, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, Switch } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Todo as TodoState, TodosLoadingState } from '../models';
 
@@ -40,33 +30,40 @@ const TodoCheck = ({ todoState, todosLoadingState, updateTodoState, deleteTodoSt
     };
 
     return (
-        <Skeleton key={todoState.id} isLoaded={!todosLoadingState[todoState.id]}>
-            <Flex minWidth={'max-content'} alignItems="center" my={1}>
-                <HStack flex={1} alignItems={'center'}>
-                    <InputGroup size={'md'}>
-                        <InputLeftAddon>
-                            <Switch id={`${todoState.id}`} isChecked={checked} onChange={handleChangeSwitch} />
-                        </InputLeftAddon>
-                        <Input
-                            sx={checked ? { ' textDecoration': 'line-through #3182ce' } : undefined}
-                            onChange={(e) => setValueInput(e.currentTarget.value)}
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleUpdate();
-                                }
-                            }}
-                            onBlur={handleUpdate}
-                            value={valueInput}
-                        />
-                        <InputRightAddon>
-                            <Button onClick={handleDelete} size={'xs'} colorScheme="red" px={2} id={`${todoState.id}`}>
-                                <DeleteIcon />
-                            </Button>
-                        </InputRightAddon>
-                    </InputGroup>
-                </HStack>
-            </Flex>
-        </Skeleton>
+        <Flex minWidth={'max-content'} alignItems="center" py={1}>
+            <HStack flex={1} alignItems={'center'}>
+                <InputGroup size={'xs'}>
+                    <InputLeftAddon py={4}>
+                        <Switch id={`${todoState.id}`} isChecked={checked} onChange={handleChangeSwitch} size={'md'} />
+                    </InputLeftAddon>
+                    <Input
+                        id={`${todoState.id}`}
+                        sx={checked ? { ' textDecoration': 'line-through #3182ce' } : undefined}
+                        onChange={(e) => setValueInput(e.currentTarget.value)}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                                handleUpdate();
+                            }
+                        }}
+                        onBlur={handleUpdate}
+                        value={valueInput}
+                        py={4}
+                        fontSize={'md'}
+                    />
+                    <InputRightAddon py={4}>
+                        <Button
+                            isLoading={todosLoadingState[todoState.id]}
+                            onClick={handleDelete}
+                            size={'xs'}
+                            colorScheme="red"
+                            py={2}
+                            id={`${todoState.id}`}>
+                            <DeleteIcon />
+                        </Button>
+                    </InputRightAddon>
+                </InputGroup>
+            </HStack>
+        </Flex>
     );
 };
 
