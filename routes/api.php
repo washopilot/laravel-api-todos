@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TodoController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('todos', TodoController::class);
 // Route::get('/todos', [TodoController::class, 'index'])->name('todos');
+
+Route::apiResource('categories', CategoryController::class);
