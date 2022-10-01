@@ -74,7 +74,7 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     useEffect(() => {
         console.count('cambio en el State');
-        console.log('State', todosState);
+        // console.log('State', todosState);
     }, [todosState]);
 
     return (

@@ -2,8 +2,19 @@ import { useContext } from 'react';
 
 import TodoCheck from './TodoCheck';
 
+import { EditIcon } from '@chakra-ui/icons';
+import {
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box,
+    Button,
+    HStack,
+    Text
+} from '@chakra-ui/react';
 import { AppStateContext } from '../AppStateContext';
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box } from '@chakra-ui/react';
 
 const TodosCheck = () => {
     const { categoryState, todosState, todosLoadingState, deleteTodoState, updateTodoState } =
@@ -14,16 +25,22 @@ const TodosCheck = () => {
             <Accordion allowToggle>
                 {categoryState.map((categoryState) => {
                     return (
-                        <AccordionItem key={categoryState.id}>
+                        <AccordionItem key={categoryState.id} w={'100%'}>
                             <h2>
-                                <AccordionButton>
-                                    <Box flex="1" textAlign="left">
-                                        {categoryState.description}
-                                    </Box>
-                                    <AccordionIcon />
-                                </AccordionButton>
+                                <HStack>
+                                    <Button size={'xs'} colorScheme="blue" py={2} id={`${categoryState.id}`}>
+                                        <EditIcon />
+                                    </Button>
+                                    <AccordionButton>
+                                        <Box flex="1" textAlign="left">
+                                            {categoryState.description}
+                                            <Text fontWeight={'bold'}>TODOs</Text>
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                </HStack>
                             </h2>
-                            <AccordionPanel>
+                            <AccordionPanel p={2}>
                                 {todosState.map((todoState) => {
                                     return (
                                         todoState.category_id == categoryState.id && (
