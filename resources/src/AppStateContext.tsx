@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
-import { Todo, Todo as TodoState, TodosLoadingState } from './models';
+import { Category, Todo, Todo as TodoState, TodosLoadingState } from './models';
 
 const url = `${import.meta.env.VITE_APP_URL}/api/todos`;
 
 export interface IAppStateContext {
+    categoryState: Category[];
     todosState: TodoState[];
     todosLoadingState: TodosLoadingState;
     spinLoading: boolean;
@@ -17,12 +18,19 @@ const AppStateContext = createContext({} as IAppStateContext);
 
 const AppStateContextProvider = ({ children }: { children: React.ReactNode }) => {
     // the value that will be given to the context
+    const [categoryState, setCategoryState] = useState([] as Category[]);
     const [todosState, setTodosState] = useState([] as TodoState[]);
     const [spinLoading, setSpinLoading] = useState(false);
     const [todosLoadingState, setTodosLoadingState] = useState([] as TodosLoadingState);
 
     const handleFetch = () => {
         setSpinLoading(true);
+
+        axios.get<Category[]>(url.replace('todos', 'categories')).then((response) => {
+            console.count('axios get all categories');
+            setCategoryState(response.data);
+        });
+
         axios.get<Todo[]>(url).then((response) => {
             console.count('axios get all todos');
             setTodosState(response.data);
@@ -66,12 +74,21 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     useEffect(() => {
         console.count('cambio en el State');
+        console.log('State', todosState);
     }, [todosState]);
 
     return (
         // the Provider gives access to the context to its children
         <AppStateContext.Provider
-            value={{ todosState, todosLoadingState, spinLoading, deleteTodoState, updateTodoState, inputTodoState }}>
+            value={{
+                categoryState,
+                todosState,
+                todosLoadingState,
+                spinLoading,
+                deleteTodoState,
+                updateTodoState,
+                inputTodoState
+            }}>
             {children}
         </AppStateContext.Provider>
     );
