@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Category;
 use App\Models\Todo;
 use Illuminate\Database\Seeder;
 
@@ -20,6 +22,7 @@ class DatabaseSeeder extends Seeder {
         //     'email' => 'test@example.com',
         // ]);
 
-        Todo::factory(20)->create();
+        Category::factory(5)->create();
+        Todo::factory(10)->create();
     }
 }

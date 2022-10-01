@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,8 +16,9 @@ class TodoFactory extends Factory {
      */
     public function definition() {
         return [
-            'todo' => fake()->sentence(3),
-            'status' => fake()->randomElement(['complete', 'incomplete'])
+            'todo' => fake()->words(3, true),
+            'status' => fake()->randomElement(['complete', 'incomplete']),
+            'category_id' => Category::all()->random()->id
         ];
     }
 }
