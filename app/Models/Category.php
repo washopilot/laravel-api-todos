@@ -10,4 +10,8 @@ class Category extends Model {
 
     protected $fillable = ['description'];
     protected $hidden = ['created_at', 'updated_at'];
+
+    public function todos() {
+        return $this->hasMany(Todo::class, 'category_id');
+    }
 }
