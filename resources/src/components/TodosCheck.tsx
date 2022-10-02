@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 
 import TodoCheck from './TodoCheck';
 
@@ -34,6 +34,8 @@ const TodosCheck = () => {
     const [valueModal, setValueModal] = useState<string>('');
     const [categoryId, setCategoryId] = useState<number>();
 
+    const valueRef = useRef<HTMLInputElement>(null);
+
     const handleEditCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
         const tempCategory = categoryState.find((value) => value.id === Number(e.currentTarget.id));
         setValueModal(tempCategory!.description);
@@ -42,10 +44,8 @@ const TodosCheck = () => {
         console.log('Se abre modal');
     };
 
-    const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const data = Array.from(new FormData(e.currentTarget));
-        console.log(Object.fromEntries(data), categoryId);
+    const handleSave = () => {
+        console.log(valueRef.current?.value, categoryId);
         onClose();
     };
 
@@ -99,13 +99,18 @@ const TodosCheck = () => {
                 <ModalContent>
                     <ModalHeader>Edit Category</ModalHeader>
                     <ModalCloseButton />
-                    <form onSubmit={handleSave}>
+                    <form>
                         <ModalBody pb={6}>
                             <FormLabel>Category name</FormLabel>
-                            <Input name="description" defaultValue={valueModal} placeholder="Set category name" />
+                            <Input
+                                name="description"
+                                defaultValue={valueModal}
+                                placeholder="Set category name"
+                                ref={valueRef}
+                            />
                         </ModalBody>
                         <ModalFooter>
-                            <Button isLoading={false} type={'submit'} colorScheme="blue" mr={3}>
+                            <Button isLoading={false} colorScheme="blue" mr={3} onClick={handleSave}>
                                 Save
                             </Button>
                             <Button onClick={onClose}>Cancel</Button>
