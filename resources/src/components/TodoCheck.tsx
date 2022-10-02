@@ -1,5 +1,15 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Button, Flex, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, Switch } from '@chakra-ui/react';
+import {
+    Button,
+    Flex,
+    HStack,
+    Input,
+    InputGroup,
+    InputLeftAddon,
+    InputRightAddon,
+    Switch,
+    Tooltip
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { Todo as TodoState, TodosLoadingState } from '../models';
 
@@ -51,15 +61,17 @@ const TodoCheck = ({ todoState, todosLoadingState, updateTodoState, deleteTodoSt
                         fontSize={'md'}
                     />
                     <InputRightAddon py={4}>
-                        <Button
-                            isLoading={todosLoadingState[todoState.id]}
-                            onClick={handleDelete}
-                            size={'xs'}
-                            colorScheme="red"
-                            py={2}
-                            id={`${todoState.id}`}>
-                            <DeleteIcon />
-                        </Button>
+                        <Tooltip label="Delete Todo">
+                            <Button
+                                isLoading={todosLoadingState[todoState.id]}
+                                onClick={handleDelete}
+                                size={'xs'}
+                                colorScheme="red"
+                                py={2}
+                                id={`${todoState.id}`}>
+                                <DeleteIcon />
+                            </Button>
+                        </Tooltip>
                     </InputRightAddon>
                 </InputGroup>
             </HStack>

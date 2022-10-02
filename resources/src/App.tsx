@@ -4,7 +4,6 @@ import { useContext } from 'react';
 import TodosCheck from './components/TodosCheck';
 
 import { AppStateContext } from './AppStateContext';
-import InputTodoValue from './components/InputTodoValue';
 
 const App = () => {
     const { spinLoading } = useContext(AppStateContext);
@@ -12,7 +11,7 @@ const App = () => {
     return (
         <>
             <Container py={5} alignContent={'space-between'} textAlign={'center'}>
-                <InputTodoValue />
+                {/* <InputTodoValue /> */}
                 {spinLoading && (
                     <Spinner
                         thickness="4px"
