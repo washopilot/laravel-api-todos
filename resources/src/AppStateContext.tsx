@@ -2,16 +2,18 @@ import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
 import { Category, Todo, Todo as TodoState, TodosLoadingState } from './models';
 
-const url = `${import.meta.env.VITE_APP_URL}/api/todos`;
+const url = `${import.meta.env.VITE_APP_URL}/api`;
 
 export interface IAppStateContext {
     categoryState: Category[];
+    categoryLoadingState: boolean;
     todosState: TodoState[];
     todosLoadingState: TodosLoadingState;
     spinLoading: boolean;
     updateTodoState: (todoState: TodoState) => void;
     deleteTodoState: (id: number) => void;
     inputTodoState: (todoState: TodoState) => void;
+    updateCategoryState: (id: number, description: string) => void;
 }
 
 const AppStateContext = createContext({} as IAppStateContext);
@@ -22,19 +24,20 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
     const [todosState, setTodosState] = useState([] as TodoState[]);
     const [spinLoading, setSpinLoading] = useState(false);
     const [todosLoadingState, setTodosLoadingState] = useState([] as TodosLoadingState);
+    const [categoryLoadingState, setCategoryLoadingState] = useState(false);
 
     const handleFetch = () => {
-        setSpinLoading(true);
+        // setSpinLoading(true);
 
-        axios.get<Category[]>(url.replace('todos', 'categories')).then((response) => {
+        axios.get<Category[]>(`${url}/categories`).then((response) => {
             console.count('axios get all categories');
             setCategoryState(response.data);
         });
 
-        axios.get<Todo[]>(url).then((response) => {
+        axios.get<Todo[]>(`${url}/todos`).then((response) => {
             console.count('axios get all todos');
             setTodosState(response.data);
-            setSpinLoading(false);
+            // setSpinLoading(false);
         });
     };
 
@@ -43,7 +46,7 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
         const { id, ...request } = todoState;
         const appStateCopy = [...todosState];
         setTodosLoadingState((prevState) => ({ ...prevState, [todoState.id]: true }));
-        axios.put<Todo>(`${url}/${todoState.id}`, request).then(() => {
+        axios.put<Todo>(`${url}/todos/${todoState.id}`, request).then(() => {
             console.count('axios put Changed');
             appStateCopy[appStateCopy.findIndex((obj) => obj.id === todoState.id)] = { ...todoState };
             setTodosState(appStateCopy);
@@ -53,7 +56,7 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     const deleteTodoState = (id: number) => {
         setTodosLoadingState((prevState) => ({ ...prevState, [id]: true }));
-        axios.delete<Todo>(`${url}/${id}`).then(() => {
+        axios.delete<Todo>(`${url}/todos/${id}`).then(() => {
             console.count('axios delete');
             setTodosState((prevState) => prevState.filter((obj) => obj.id !== id));
             setTodosLoadingState((prevState) => ({ ...prevState, [id]: false }));
@@ -62,9 +65,24 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     const inputTodoState = (todoState: TodoState) => {
         console.count(`todo creado`);
-        axios.post<TodoState>(`${url}`, todoState).then(() => {
+        axios.post<TodoState>(`${url}/todos`, todoState).then(() => {
             console.count('axios post todoInput');
             handleFetch();
+        });
+    };
+
+    const updateCategoryState = (id: number, description: string) => {
+        console.count('categoria actualizada');
+        setCategoryLoadingState(true);
+        const categoryStateCopy = [...categoryState];
+        axios.put(`${url}/categories/${id}`, { description: description }).then(() => {
+            console.count('axios put changed category');
+            setCategoryLoadingState(false);
+            categoryStateCopy[categoryStateCopy.findIndex((obj) => obj.id === id)] = {
+                id: id,
+                description: description
+            };
+            setCategoryState(categoryStateCopy);
         });
     };
 
@@ -82,12 +100,14 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
         <AppStateContext.Provider
             value={{
                 categoryState,
+                categoryLoadingState,
                 todosState,
                 todosLoadingState,
                 spinLoading,
                 deleteTodoState,
                 updateTodoState,
-                inputTodoState
+                inputTodoState,
+                updateCategoryState
             }}>
             {children}
         </AppStateContext.Provider>

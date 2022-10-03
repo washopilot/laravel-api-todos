@@ -11,6 +11,7 @@ import {
     AccordionPanel,
     Box,
     Button,
+    FormControl,
     FormLabel,
     HStack,
     Input,
@@ -28,24 +29,31 @@ import {
 import { AppStateContext } from '../AppStateContext';
 
 const TodosCheck = () => {
-    const { categoryState, todosState, todosLoadingState, deleteTodoState, updateTodoState } =
-        useContext(AppStateContext);
+    const {
+        categoryState,
+        categoryLoadingState,
+        todosState,
+        todosLoadingState,
+        deleteTodoState,
+        updateTodoState,
+        updateCategoryState
+    } = useContext(AppStateContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [valueModal, setValueModal] = useState<string>('');
-    const [categoryId, setCategoryId] = useState<number>();
+    const [categoryId, setCategoryId] = useState<number>(0);
 
     const valueRef = useRef<HTMLInputElement>(null);
 
     const handleEditCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
         const tempCategory = categoryState.find((value) => value.id === Number(e.currentTarget.id));
         setValueModal(tempCategory!.description);
-        setCategoryId(tempCategory?.id);
+        setCategoryId(tempCategory!.id);
         onOpen();
         console.log('Se abre modal');
     };
 
-    const handleSave = () => {
-        console.log(valueRef.current?.value, categoryId);
+    const handleSave = async () => {
+        await updateCategoryState(categoryId, valueRef.current!.value);
         onClose();
     };
 
@@ -99,8 +107,8 @@ const TodosCheck = () => {
                 <ModalContent>
                     <ModalHeader>Edit Category</ModalHeader>
                     <ModalCloseButton />
-                    <form>
-                        <ModalBody pb={6}>
+                    <ModalBody pb={6}>
+                        <FormControl>
                             <FormLabel>Category name</FormLabel>
                             <Input
                                 name="description"
@@ -108,14 +116,14 @@ const TodosCheck = () => {
                                 placeholder="Set category name"
                                 ref={valueRef}
                             />
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button isLoading={false} colorScheme="blue" mr={3} onClick={handleSave}>
-                                Save
-                            </Button>
-                            <Button onClick={onClose}>Cancel</Button>
-                        </ModalFooter>
-                    </form>
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button isLoading={categoryLoadingState} colorScheme="blue" mr={3} onClick={handleSave}>
+                            Save
+                        </Button>
+                        <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>

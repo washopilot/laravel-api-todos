@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder {
         // ]);
 
         Category::factory(5)->create();
-        Todo::factory(20)->create();
+        Todo::factory(30)->create();
     }
 }
