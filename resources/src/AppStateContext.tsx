@@ -9,7 +9,6 @@ export interface IAppStateContext {
     categoryLoadingState: boolean;
     todosState: TodoState[];
     todosLoadingState: TodosLoadingState;
-    spinLoading: boolean;
     updateTodoState: (todoState: TodoState) => void;
     deleteTodoState: (id: number) => void;
     inputTodoState: (id: number) => void;
@@ -22,13 +21,10 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
     // the value that will be given to the context
     const [categoryState, setCategoryState] = useState([] as Category[]);
     const [todosState, setTodosState] = useState([] as TodoState[]);
-    const [spinLoading, setSpinLoading] = useState(false);
     const [todosLoadingState, setTodosLoadingState] = useState([] as TodosLoadingState);
     const [categoryLoadingState, setCategoryLoadingState] = useState(false);
 
     const handleFetch = () => {
-        // setSpinLoading(true);
-
         axios.get<Category[]>(`${url}/categories`).then((response) => {
             console.count('axios get all categories');
             setCategoryState(response.data);
@@ -37,7 +33,6 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
         axios.get<Todo[]>(`${url}/todos`).then((response) => {
             console.count('axios get all todos');
             setTodosState(response.data);
-            // setSpinLoading(false);
         });
     };
 
@@ -95,7 +90,6 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     useEffect(() => {
         console.count('cambio en el State');
-        // console.log('State', todosState);
     }, [todosState]);
 
     return (
@@ -106,7 +100,6 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
                 categoryLoadingState,
                 todosState,
                 todosLoadingState,
-                spinLoading,
                 deleteTodoState,
                 updateTodoState,
                 inputTodoState,
