@@ -9,8 +9,15 @@ import {
     AccordionIcon,
     AccordionItem,
     AccordionPanel,
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogOverlay,
     Box,
     Button,
+    ButtonGroup,
     Flex,
     FormControl,
     FormLabel,
@@ -23,11 +30,21 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverCloseButton,
+    PopoverContent,
+    PopoverFooter,
+    PopoverHeader,
+    PopoverTrigger,
+    Portal,
     Spacer,
     Text,
     Tooltip,
     useDisclosure
 } from '@chakra-ui/react';
+
 import { AppStateContext } from '../AppStateContext';
 
 const TodosCheck = () => {
@@ -41,27 +58,101 @@ const TodosCheck = () => {
         updateCategoryState,
         inputTodoState
     } = useContext(AppStateContext);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+
     const [valueModal, setValueModal] = useState<string>('');
     const [categoryId, setCategoryId] = useState<number>(0);
 
     const valueRef = useRef<HTMLInputElement>(null);
+    const initialFocusRef = useRef(null);
+
+    const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
+    const { isOpen: isPopupOpen, onToggle: onPopupToggle, onClose: onPopupClose } = useDisclosure();
 
     const handleEditCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
         const tempCategory = categoryState.find((value) => value.id === Number(e.currentTarget.id));
         setValueModal(tempCategory!.description);
         setCategoryId(tempCategory!.id);
-        onOpen();
+        onModalOpen();
         console.log('Se abre modal');
     };
 
     const handleSave = async () => {
         await updateCategoryState(categoryId, valueRef.current!.value);
-        onClose();
+        onModalClose();
     };
 
     const handleNewTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
         inputTodoState(Number(e.currentTarget.id));
+    };
+
+    const CustomModal = () => {
+        return (
+            <Modal
+                isOpen={isModalOpen}
+                onClose={onModalClose}
+                // motionPreset={'none'}
+            >
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Edit Category</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                        <FormControl>
+                            <FormLabel>Category name</FormLabel>
+                            <Input
+                                name="description"
+                                defaultValue={valueModal}
+                                placeholder="Set category name"
+                                ref={valueRef}
+                            />
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Flex py={2} w={'100%'}>
+                            {/* <Button onClick={onSecondModalOpen} colorScheme={'red'}>
+                                Delete
+                            </Button> */}
+                            <Popover
+                                // returnFocusOnClose={false}
+                                initialFocusRef={initialFocusRef}
+                                // closeOnBlur={false}
+                                // placement="right"
+                                // closeOnBlur={false}
+                            >
+                                {({ onClose }) => (
+                                    <>
+                                        <PopoverTrigger>
+                                            <Button colorScheme={'red'}>Delete</Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverHeader fontWeight="semibold">Confirmation</PopoverHeader>
+                                            <PopoverArrow />
+                                            <PopoverCloseButton />
+                                            <PopoverBody>
+                                                Are you sure you want to continue with your action?
+                                            </PopoverBody>
+                                            <PopoverFooter display="flex" justifyContent="flex-end">
+                                                <ButtonGroup size="sm">
+                                                    <Button variant="outline" ref={initialFocusRef} onClick={onClose}>
+                                                        Cancel
+                                                    </Button>
+                                                    <Button colorScheme="red" onClick={onModalClose}>Apply</Button>
+                                                </ButtonGroup>
+                                            </PopoverFooter>
+                                        </PopoverContent>
+                                    </>
+                                )}
+                            </Popover>
+                            <Spacer />
+                            <Button isLoading={categoryLoadingState} colorScheme="blue" mr={1} onClick={handleSave}>
+                                Save
+                            </Button>
+                            <Button onClick={onModalClose}>Cancel</Button>
+                        </Flex>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        );
     };
 
     return (
@@ -81,7 +172,7 @@ const TodosCheck = () => {
                                             <EditIcon />
                                         </Button>
                                     </Tooltip>
-                                    <AccordionButton>
+                                    <AccordionButton _expanded={{ bg: 'blue.400', color: 'white' }}>
                                         <Box flex="1" textAlign="left">
                                             {categoryState.description}
                                             <Text fontWeight={'bold'}>TODOs</Text>
@@ -121,30 +212,8 @@ const TodosCheck = () => {
                     );
                 })}
             </Accordion>
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Edit Category</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <FormControl>
-                            <FormLabel>Category name</FormLabel>
-                            <Input
-                                name="description"
-                                defaultValue={valueModal}
-                                placeholder="Set category name"
-                                ref={valueRef}
-                            />
-                        </FormControl>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button isLoading={categoryLoadingState} colorScheme="blue" mr={3} onClick={handleSave}>
-                            Save
-                        </Button>
-                        <Button onClick={onClose}>Cancel</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+
+            <CustomModal />
         </>
     );
 };
