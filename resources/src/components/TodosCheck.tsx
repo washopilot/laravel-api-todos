@@ -11,6 +11,7 @@ import {
     AccordionPanel,
     Box,
     Button,
+    Flex,
     FormControl,
     FormLabel,
     HStack,
@@ -22,6 +23,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Spacer,
     Text,
     Tooltip,
     useDisclosure
@@ -36,7 +38,8 @@ const TodosCheck = () => {
         todosLoadingState,
         deleteTodoState,
         updateTodoState,
-        updateCategoryState
+        updateCategoryState,
+        inputTodoState
     } = useContext(AppStateContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [valueModal, setValueModal] = useState<string>('');
@@ -55,6 +58,10 @@ const TodosCheck = () => {
     const handleSave = async () => {
         await updateCategoryState(categoryId, valueRef.current!.value);
         onClose();
+    };
+
+    const handleNewTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
+        inputTodoState(Number(e.currentTarget.id));
     };
 
     return (
@@ -84,19 +91,31 @@ const TodosCheck = () => {
                                 </HStack>
                             </h2>
                             <AccordionPanel p={2}>
-                                {todosState.map((todoState) => {
-                                    return (
-                                        todoState.category_id == categoryState.id && (
-                                            <TodoCheck
-                                                key={todoState.id}
-                                                todoState={todoState}
-                                                todosLoadingState={todosLoadingState}
-                                                deleteTodoState={deleteTodoState}
-                                                updateTodoState={updateTodoState}
-                                            />
-                                        )
-                                    );
-                                })}
+                                {todosState
+                                    .map((todoState) => {
+                                        return (
+                                            todoState.category_id == categoryState.id && (
+                                                <TodoCheck
+                                                    key={todoState.id}
+                                                    todoState={todoState}
+                                                    todosLoadingState={todosLoadingState}
+                                                    deleteTodoState={deleteTodoState}
+                                                    updateTodoState={updateTodoState}
+                                                />
+                                            )
+                                        );
+                                    })
+                                    .reverse()}
+                                <Flex py={2}>
+                                    <Spacer />
+                                    <Button
+                                        id={`${categoryState.id}`}
+                                        onClick={handleNewTodo}
+                                        colorScheme="blue"
+                                        size="xs">
+                                        + Task
+                                    </Button>
+                                </Flex>
                             </AccordionPanel>
                         </AccordionItem>
                     );

@@ -12,7 +12,7 @@ export interface IAppStateContext {
     spinLoading: boolean;
     updateTodoState: (todoState: TodoState) => void;
     deleteTodoState: (id: number) => void;
-    inputTodoState: (todoState: TodoState) => void;
+    inputTodoState: (id: number) => void;
     updateCategoryState: (id: number, description: string) => void;
 }
 
@@ -63,11 +63,14 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
         });
     };
 
-    const inputTodoState = (todoState: TodoState) => {
+    const inputTodoState = (id: number) => {
         console.count(`todo creado`);
-        axios.post<TodoState>(`${url}/todos`, todoState).then(() => {
+        const request = { todo: 'New task', status: 'incomplete', category_id: id };
+        axios.post<Todo, { data: { message: string; todo: Todo } }>(`${url}/todos`, request).then((response) => {
             console.count('axios post todoInput');
-            handleFetch();
+            setTodosState((prev) => {
+                return [...prev, response.data.todo];
+            });
         });
     };
 

@@ -68,7 +68,8 @@ const TodoCheck = ({ todoState, todosLoadingState, updateTodoState, deleteTodoSt
                                 size={'xs'}
                                 colorScheme="red"
                                 py={2}
-                                id={`${todoState.id}`}>
+                                id={`${todoState.id}`}
+                                variant={'outline'}>
                                 <DeleteIcon />
                             </Button>
                         </Tooltip>
