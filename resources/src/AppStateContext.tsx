@@ -1,19 +1,20 @@
 import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
-import { Category, Todo, Todo as TodoState, TodosLoadingState } from './models';
+import { Category, Todo, TodosLoadingState } from './models';
 
 const url = `${import.meta.env.VITE_APP_URL}/api`;
 
 export interface IAppStateContext {
     categoryState: Category[];
     categoryLoadingState: boolean;
-    todosState: TodoState[];
+    todosState: Todo[];
     todosLoadingState: TodosLoadingState;
-    updateTodoState: (todoState: TodoState) => void;
+    updateTodoState: (todoState: Todo) => void;
     deleteTodoState: (id: number) => void;
     inputTodoState: (id: number) => void;
     updateCategoryState: (id: number, description: string) => void;
     deleteCategoryState: (id: number) => void;
+    inputCategoryState: () => void;
 }
 
 const AppStateContext = createContext({} as IAppStateContext);
@@ -21,7 +22,7 @@ const AppStateContext = createContext({} as IAppStateContext);
 const AppStateContextProvider = ({ children }: { children: React.ReactNode }) => {
     // the value that will be given to the context
     const [categoryState, setCategoryState] = useState([] as Category[]);
-    const [todosState, setTodosState] = useState([] as TodoState[]);
+    const [todosState, setTodosState] = useState([] as Todo[]);
     const [todosLoadingState, setTodosLoadingState] = useState([] as TodosLoadingState);
     const [categoryLoadingState, setCategoryLoadingState] = useState(false);
 
@@ -37,7 +38,7 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
         });
     };
 
-    const updateTodoState = (todoState: TodoState) => {
+    const updateTodoState = (todoState: Todo) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id, ...request } = todoState;
         const appStateCopy = [...todosState];
@@ -60,7 +61,7 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
     };
 
     const inputTodoState = (id: number) => {
-        console.count(`todo creado`);
+        console.count(`todo created`);
         const request = { todo: 'New task', status: 'incomplete', category_id: id };
         axios.post<Todo, { data: { message: string; todo: Todo } }>(`${url}/todos`, request).then((response) => {
             console.count('axios post todoInput');
@@ -71,10 +72,10 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
     };
 
     const updateCategoryState = (id: number, description: string) => {
-        console.count('categoria actualizada');
+        console.count('category updated');
         setCategoryLoadingState(true);
         const categoryStateCopy = [...categoryState];
-        axios.put(`${url}/categories/${id}`, { description: description }).then(() => {
+        axios.put<Category>(`${url}/categories/${id}`, { description: description }).then(() => {
             console.count('axios put changed category');
             categoryStateCopy[categoryStateCopy.findIndex((obj) => obj.id === id)] = {
                 id: id,
@@ -86,13 +87,26 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
     };
 
     const deleteCategoryState = (id: number) => {
-        console.count('categoría eliminada');
+        console.count('category deleted');
         setCategoryLoadingState(true);
-        axios.delete<Todo>(`${url}/categories/${id}`).then(() => {
+        axios.delete<Category>(`${url}/categories/${id}`).then(() => {
             console.count('axios delete category');
             setCategoryLoadingState(false);
             setCategoryState((prev) => prev.filter((obj) => obj.id !== id));
         });
+    };
+
+    const inputCategoryState = () => {
+        console.count('category created');
+        const request = { description: 'New Category' };
+        axios
+            .post<Category, { data: { message: string; category: Category } }>(`${url}/categories`, request)
+            .then((response) => {
+                console.count('axios category created');
+                setCategoryState((prev) => {
+                    return [...prev, response.data.category];
+                });
+            });
     };
 
     useEffect(() => {
@@ -100,7 +114,7 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
     }, []);
 
     useEffect(() => {
-        console.count('cambio en el State');
+        console.count('State Changed!!!');
     }, [todosState]);
 
     return (
@@ -115,7 +129,8 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
                 updateTodoState,
                 inputTodoState,
                 updateCategoryState,
-                deleteCategoryState
+                deleteCategoryState,
+                inputCategoryState
             }}>
             {children}
         </AppStateContext.Provider>

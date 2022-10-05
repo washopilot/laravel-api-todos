@@ -50,7 +50,8 @@ const TodosCheck = () => {
         updateTodoState,
         updateCategoryState,
         inputTodoState,
-        deleteCategoryState
+        deleteCategoryState,
+        inputCategoryState
     } = useContext(AppStateContext);
 
     const [valueModal, setValueModal] = useState<string>('');
@@ -66,7 +67,7 @@ const TodosCheck = () => {
         setValueModal(tempCategory!.description);
         setCategoryId(tempCategory!.id);
         onModalOpen();
-        console.log('Se abre modal');
+        console.log('Open modal');
     };
 
     const handleSave = async () => {
@@ -81,6 +82,10 @@ const TodosCheck = () => {
     const handleDeleteCategory = async () => {
         await deleteCategoryState(categoryId);
         onModalClose();
+    };
+
+    const handleNewCategory = () => {
+        inputCategoryState();
     };
 
     return (
@@ -140,6 +145,13 @@ const TodosCheck = () => {
                     );
                 })}
             </Accordion>
+
+            <Flex py={4}>
+                <Button onClick={handleNewCategory} size="sm">
+                    + Category
+                </Button>
+                <Spacer />
+            </Flex>
 
             <Modal isOpen={isModalOpen} onClose={onModalClose}>
                 <ModalOverlay />
