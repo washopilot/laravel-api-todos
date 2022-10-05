@@ -13,6 +13,7 @@ export interface IAppStateContext {
     deleteTodoState: (id: number) => void;
     inputTodoState: (id: number) => void;
     updateCategoryState: (id: number, description: string) => void;
+    deleteCategoryState: (id: number) => void;
 }
 
 const AppStateContext = createContext({} as IAppStateContext);
@@ -40,21 +41,21 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id, ...request } = todoState;
         const appStateCopy = [...todosState];
-        setTodosLoadingState((prevState) => ({ ...prevState, [todoState.id]: true }));
+        setTodosLoadingState((prev) => ({ ...prev, [todoState.id]: true }));
         axios.put<Todo>(`${url}/todos/${todoState.id}`, request).then(() => {
             console.count('axios put Changed');
             appStateCopy[appStateCopy.findIndex((obj) => obj.id === todoState.id)] = { ...todoState };
             setTodosState(appStateCopy);
-            setTodosLoadingState((prevState) => ({ ...prevState, [todoState.id]: false }));
+            setTodosLoadingState((prev) => ({ ...prev, [todoState.id]: false }));
         });
     };
 
     const deleteTodoState = (id: number) => {
-        setTodosLoadingState((prevState) => ({ ...prevState, [id]: true }));
+        setTodosLoadingState((prev) => ({ ...prev, [id]: true }));
         axios.delete<Todo>(`${url}/todos/${id}`).then(() => {
             console.count('axios delete');
-            setTodosState((prevState) => prevState.filter((obj) => obj.id !== id));
-            setTodosLoadingState((prevState) => ({ ...prevState, [id]: false }));
+            setTodosState((prev) => prev.filter((obj) => obj.id !== id));
+            setTodosLoadingState((prev) => ({ ...prev, [id]: false }));
         });
     };
 
@@ -75,12 +76,22 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
         const categoryStateCopy = [...categoryState];
         axios.put(`${url}/categories/${id}`, { description: description }).then(() => {
             console.count('axios put changed category');
-            setCategoryLoadingState(false);
             categoryStateCopy[categoryStateCopy.findIndex((obj) => obj.id === id)] = {
                 id: id,
                 description: description
             };
+            setCategoryLoadingState(false);
             setCategoryState(categoryStateCopy);
+        });
+    };
+
+    const deleteCategoryState = (id: number) => {
+        console.count('categoría eliminada');
+        setCategoryLoadingState(true);
+        axios.delete<Todo>(`${url}/categories/${id}`).then(() => {
+            console.count('axios delete category');
+            setCategoryLoadingState(false);
+            setCategoryState((prev) => prev.filter((obj) => obj.id !== id));
         });
     };
 
@@ -103,7 +114,8 @@ const AppStateContextProvider = ({ children }: { children: React.ReactNode }) =>
                 deleteTodoState,
                 updateTodoState,
                 inputTodoState,
-                updateCategoryState
+                updateCategoryState,
+                deleteCategoryState
             }}>
             {children}
         </AppStateContext.Provider>

@@ -49,7 +49,8 @@ const TodosCheck = () => {
         deleteTodoState,
         updateTodoState,
         updateCategoryState,
-        inputTodoState
+        inputTodoState,
+        deleteCategoryState
     } = useContext(AppStateContext);
 
     const [valueModal, setValueModal] = useState<string>('');
@@ -75,6 +76,11 @@ const TodosCheck = () => {
 
     const handleNewTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
         inputTodoState(Number(e.currentTarget.id));
+    };
+
+    const handleDeleteCategory = async () => {
+        await deleteCategoryState(categoryId);
+        onModalClose();
     };
 
     return (
@@ -171,7 +177,7 @@ const TodosCheck = () => {
                                                     <Button variant="outline" ref={initialFocusRef} onClick={onClose}>
                                                         Cancel
                                                     </Button>
-                                                    <Button colorScheme="red" onClick={onModalClose}>
+                                                    <Button colorScheme="red" onClick={handleDeleteCategory}>
                                                         Apply
                                                     </Button>
                                                 </ButtonGroup>
@@ -181,7 +187,7 @@ const TodosCheck = () => {
                                 )}
                             </Popover>
                             <Spacer />
-                            <Button isLoading={categoryLoadingState} colorScheme="blue" mr={1} onClick={handleSave}>
+                            <Button isLoading={categoryLoadingState} colorScheme="blue" mr={2} onClick={handleSave}>
                                 Save
                             </Button>
                             <Button onClick={onModalClose}>Cancel</Button>
