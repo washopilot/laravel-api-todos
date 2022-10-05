@@ -9,12 +9,6 @@ import {
     AccordionIcon,
     AccordionItem,
     AccordionPanel,
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogOverlay,
     Box,
     Button,
     ButtonGroup,
@@ -38,7 +32,6 @@ import {
     PopoverFooter,
     PopoverHeader,
     PopoverTrigger,
-    Portal,
     Spacer,
     Text,
     Tooltip,
@@ -66,7 +59,6 @@ const TodosCheck = () => {
     const initialFocusRef = useRef(null);
 
     const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
-    const { isOpen: isPopupOpen, onToggle: onPopupToggle, onClose: onPopupClose } = useDisclosure();
 
     const handleEditCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
         const tempCategory = categoryState.find((value) => value.id === Number(e.currentTarget.id));
@@ -83,76 +75,6 @@ const TodosCheck = () => {
 
     const handleNewTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
         inputTodoState(Number(e.currentTarget.id));
-    };
-
-    const CustomModal = () => {
-        return (
-            <Modal
-                isOpen={isModalOpen}
-                onClose={onModalClose}
-                // motionPreset={'none'}
-            >
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Edit Category</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <FormControl>
-                            <FormLabel>Category name</FormLabel>
-                            <Input
-                                name="description"
-                                defaultValue={valueModal}
-                                placeholder="Set category name"
-                                ref={valueRef}
-                            />
-                        </FormControl>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Flex py={2} w={'100%'}>
-                            {/* <Button onClick={onSecondModalOpen} colorScheme={'red'}>
-                                Delete
-                            </Button> */}
-                            <Popover
-                                // returnFocusOnClose={false}
-                                initialFocusRef={initialFocusRef}
-                                // closeOnBlur={false}
-                                // placement="right"
-                                // closeOnBlur={false}
-                            >
-                                {({ onClose }) => (
-                                    <>
-                                        <PopoverTrigger>
-                                            <Button colorScheme={'red'}>Delete</Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <PopoverHeader fontWeight="semibold">Confirmation</PopoverHeader>
-                                            <PopoverArrow />
-                                            <PopoverCloseButton />
-                                            <PopoverBody>
-                                                Are you sure you want to continue with your action?
-                                            </PopoverBody>
-                                            <PopoverFooter display="flex" justifyContent="flex-end">
-                                                <ButtonGroup size="sm">
-                                                    <Button variant="outline" ref={initialFocusRef} onClick={onClose}>
-                                                        Cancel
-                                                    </Button>
-                                                    <Button colorScheme="red" onClick={onModalClose}>Apply</Button>
-                                                </ButtonGroup>
-                                            </PopoverFooter>
-                                        </PopoverContent>
-                                    </>
-                                )}
-                            </Popover>
-                            <Spacer />
-                            <Button isLoading={categoryLoadingState} colorScheme="blue" mr={1} onClick={handleSave}>
-                                Save
-                            </Button>
-                            <Button onClick={onModalClose}>Cancel</Button>
-                        </Flex>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        );
     };
 
     return (
@@ -213,7 +135,60 @@ const TodosCheck = () => {
                 })}
             </Accordion>
 
-            <CustomModal />
+            <Modal isOpen={isModalOpen} onClose={onModalClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Edit Category</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                        <FormControl>
+                            <FormLabel>Category name</FormLabel>
+                            <Input
+                                name="description"
+                                defaultValue={valueModal}
+                                placeholder="Set category name"
+                                ref={valueRef}
+                            />
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Flex py={2} w={'100%'}>
+                            <Popover initialFocusRef={initialFocusRef}>
+                                {({ onClose }) => (
+                                    <>
+                                        <PopoverTrigger>
+                                            <Button colorScheme={'red'}>Delete</Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverHeader fontWeight="semibold">Confirmation</PopoverHeader>
+                                            <PopoverArrow />
+                                            <PopoverCloseButton />
+                                            <PopoverBody>
+                                                Are you sure you want to continue with your action?
+                                            </PopoverBody>
+                                            <PopoverFooter display="flex" justifyContent="flex-end">
+                                                <ButtonGroup size="sm">
+                                                    <Button variant="outline" ref={initialFocusRef} onClick={onClose}>
+                                                        Cancel
+                                                    </Button>
+                                                    <Button colorScheme="red" onClick={onModalClose}>
+                                                        Apply
+                                                    </Button>
+                                                </ButtonGroup>
+                                            </PopoverFooter>
+                                        </PopoverContent>
+                                    </>
+                                )}
+                            </Popover>
+                            <Spacer />
+                            <Button isLoading={categoryLoadingState} colorScheme="blue" mr={1} onClick={handleSave}>
+                                Save
+                            </Button>
+                            <Button onClick={onModalClose}>Cancel</Button>
+                        </Flex>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 };
