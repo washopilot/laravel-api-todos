@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('login', [LoginController::class, 'login']);
 
-Route::apiResource('todos', TodoController::class);
+Route::apiResource('todos', TodoController::class)->middleware('auth');
 // Route::get('/todos', [TodoController::class, 'index'])->name('todos');
 
-Route::apiResource('categories', CategoryController::class);
+Route::apiResource('categories', CategoryController::class)->middleware('auth');
