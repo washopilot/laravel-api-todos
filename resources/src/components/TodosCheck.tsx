@@ -38,7 +38,10 @@ import {
     useDisclosure
 } from '@chakra-ui/react';
 
+import axios from 'axios';
 import { AppStateContext } from '../AppStateContext';
+
+const url = `${import.meta.env.VITE_APP_URL}/api`;
 
 const TodosCheck = () => {
     const {
@@ -86,6 +89,31 @@ const TodosCheck = () => {
 
     const handleNewCategory = () => {
         inputCategoryState();
+    };
+
+    const handleAuthenticate = () => {
+        axios.defaults.withCredentials = true;
+        axios.get<any>(`http://127.0.0.1:8000/sanctum/csrf-cookie`).then((response) => {
+            console.log('autenticado');
+            console.log(response.config.headers);
+        });
+    };
+
+    const handleGetUser = () => {
+        axios.defaults.withCredentials = true;
+        axios.get<any>(`${url}/user`).then((response) => {
+            console.log('usuario');
+            console.log(response);
+        });
+    };
+
+    const handleLogin = () => {
+        const request = { email: 'washopilot@yahoo.com', password: 'root1979' };
+        axios.defaults.withCredentials = true;
+        axios.post(`${url}/login`, request).then((response) => {
+            console.log('logueado');
+            console.log(response);
+        });
     };
 
     return (
@@ -149,6 +177,19 @@ const TodosCheck = () => {
             <Flex py={4}>
                 <Button onClick={handleNewCategory} size="sm">
                     + Category
+                </Button>
+                <Spacer />
+            </Flex>
+
+            <Flex py={4}>
+                <Button onClick={handleAuthenticate} size="md" mr={2}>
+                    AUTHENTICATE
+                </Button>
+                <Button onClick={handleLogin} size="md" mr={2}>
+                    LOGIN
+                </Button>
+                <Button onClick={handleGetUser} size="md" mr={2}>
+                    GET USER
                 </Button>
                 <Spacer />
             </Flex>

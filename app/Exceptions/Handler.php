@@ -39,25 +39,25 @@ class Handler extends ExceptionHandler {
      * @return void
      */
     public function register() {
-        $this->renderable(function (NotFoundHttpException $e, $request) {
-            if ($request->is('api/*')) {
-                return response()->json(
-                    [
-                        'message' => 'Record not found.'
-                    ],
-                    404
-                );
-            }
-        });
-        $this->renderable(function (Throwable $e, $request) {
-            if ($request->is('api/*')) {
-                return response()->json(
-                    [
-                        'Error' => 'Internal Error'
-                    ],
-                    500
-                );
-            }
-        });
+        // $this->renderable(function (NotFoundHttpException $e, $request) {
+        //     if ($request->is('api/*')) {
+        //         return response()->json(
+        //             [
+        //                 'message' => 'Record not found.'
+        //             ],
+        //             404
+        //         );
+        //     }
+        // });
+        // $this->renderable(function (Throwable $e, $request) {
+        //     if ($request->is('api/*')) {
+        //         return response()->json(
+        //             [
+        //                 'Error' => 'Internal Error'
+        //             ],
+        //             500
+        //         );
+        //     }
+        // });
     }
 }
