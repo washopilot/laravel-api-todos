@@ -93,14 +93,14 @@ const TodosCheck = () => {
 
     const handleAuthenticate = () => {
         axios.defaults.withCredentials = true;
-        axios.get<any>(`http://127.0.0.1:8000/sanctum/csrf-cookie`).then((response) => {
+        axios.get<any>(`${url}`.replace('api', 'sanctum/csrf-cookie')).then((response) => {
             console.log('autenticado');
             console.log(response.config.headers);
         });
     };
 
     const handleGetUser = () => {
-        // axios.defaults.withCredentials = true;
+        axios.defaults.withCredentials = true;
         axios.get<any>(`${url}/user`).then((response) => {
             console.log('usuario');
             console.log(response);
@@ -109,7 +109,7 @@ const TodosCheck = () => {
 
     const handleLogin = () => {
         const request = { email: 'washopilot@yahoo.com', password: 'root1979' };
-        // axios.defaults.withCredentials = true;
+        axios.defaults.withCredentials = true;
         axios.post(`${url}/login`, request).then((response) => {
             console.log('logueado');
             console.log(response);
