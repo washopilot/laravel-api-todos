@@ -23,7 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('login', [LoginController::class, 'login']);
 
-Route::apiResource('todos', TodoController::class)->middleware('auth');
+Route::post('logout', [LoginController::class, 'logout']);
+
+Route::apiResource('todos', TodoController::class)->middleware('auth:sanctum');
 // Route::get('/todos', [TodoController::class, 'index'])->name('todos');
 
-Route::apiResource('categories', CategoryController::class)->middleware('auth');
+Route::apiResource('categories', CategoryController::class)->middleware('auth:sanctum');

@@ -100,7 +100,7 @@ const TodosCheck = () => {
     };
 
     const handleGetUser = () => {
-        axios.defaults.withCredentials = true;
+        // axios.defaults.withCredentials = true;
         axios.get<any>(`${url}/user`).then((response) => {
             console.log('usuario');
             console.log(response);
@@ -109,11 +109,22 @@ const TodosCheck = () => {
 
     const handleLogin = () => {
         const request = { email: 'washopilot@yahoo.com', password: 'root1979' };
-        axios.defaults.withCredentials = true;
+        // axios.defaults.withCredentials = true;
         axios.post(`${url}/login`, request).then((response) => {
             console.log('logueado');
             console.log(response);
         });
+    };
+
+    const handleLogout = () => {
+        const request = { email: 'washopilot@yahoo.com', password: 'root1979' };
+        axios.post(`${url}/logout`, request).then((response) => {
+            console.log('logOut');
+
+            console.log(response);
+        });
+
+        console.log('logOut');
     };
 
     return (
@@ -190,6 +201,9 @@ const TodosCheck = () => {
                 </Button>
                 <Button onClick={handleGetUser} size="md" mr={2}>
                     GET USER
+                </Button>
+                <Button onClick={handleLogout} size="md" mr={2}>
+                    LOGOUT
                 </Button>
                 <Spacer />
             </Flex>

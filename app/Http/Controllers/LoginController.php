@@ -18,4 +18,8 @@ class LoginController extends Controller {
             'message' => 'Login Successful'
         ]);
     }
+
+    public function logout(Request $request) {
+        Auth::guard('web')->logout();
+    }
 }
