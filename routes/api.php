@@ -17,15 +17,20 @@ use App\Http\Controllers\Api\CategoryController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::post('login', [LoginController::class, 'login']);
 
 Route::post('logout', [LoginController::class, 'logout']);
 
-Route::apiResource('todos', TodoController::class)->middleware('auth:sanctum');
-// Route::get('/todos', [TodoController::class, 'index'])->name('todos');
+Route::group(['middleware' => ['auth:web']], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::apiResource('todos', TodoController::class);
+    Route::apiResource('categories', CategoryController::class);
+});
 
-Route::apiResource('categories', CategoryController::class)->middleware('auth:sanctum');
+// Route::get('/todos', [TodoController::class, 'index'])->name('todos');

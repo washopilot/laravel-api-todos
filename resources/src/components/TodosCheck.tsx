@@ -109,7 +109,6 @@ const TodosCheck = () => {
 
     const handleLogin = () => {
         const request = { email: 'washopilot@yahoo.com', password: 'root1979' };
-        axios.defaults.withCredentials = true;
         axios.post(`${url}/login`, request).then((response) => {
             console.log('logueado');
             console.log(response);
