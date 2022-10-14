@@ -25,7 +25,7 @@ Route::post('login', [LoginController::class, 'login']);
 
 Route::post('logout', [LoginController::class, 'logout']);
 
-Route::group(['middleware' => ['auth:web']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
