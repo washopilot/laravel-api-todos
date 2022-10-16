@@ -99,7 +99,7 @@ const TodosCheck = () => {
                                     <Tooltip label="Edit Category">
                                         <Button
                                             onClick={handleEditCategory}
-                                            size={'xs'}
+                                            size={'md'}
                                             py={2}
                                             id={`${categoryState.id}`}>
                                             <EditIcon />
