@@ -16,6 +16,7 @@ import {
     useColorModeValue
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -64,6 +65,9 @@ const Login = () => {
                                 }}>
                                 Sign in
                             </Button>
+                            <Link as={ReactRouterLink} to="/" sx={{ textDecoration: 'underline' }} color={'blue.400'}>
+                                Link to App
+                            </Link>
                         </Stack>
                     </Stack>
                 </Box>
